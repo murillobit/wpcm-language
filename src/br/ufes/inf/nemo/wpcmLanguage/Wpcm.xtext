@@ -5,97 +5,43 @@ import "platform:/resource/br.ufes.inf.nemo.wpcmMetamodel/model/wpcmMetamodel.ec
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 ContentModel returns wpcm::ContentModel:
-  'ContentModel'
-  name=EString
-  '{'
+  name=EString ':' '{'
     posttypes+=PostType ( "," posttypes+=PostType)* 
   '}';
 
-
-Field returns wpcm::Field:
-  RelationshipField | TextField | ImageField | BooleanField | RepeaterField | NumberField;
-
-
-EString returns ecore::EString:
-  STRING | ID;
-
 PostType returns wpcm::PostType:
-  (hierarchical?='hierarchical')?
-  'PostType'
-  name=EString
-  '{'
-    'pluralName' pluralName=EString
-    'singularName' singularName=EString
-    'public' public=EBoolean
-    'hasArchivePage' hasArchivePage=EBoolean
-    ('fields' '{' fields+=Field ( "," fields+=Field)* '}' )?
-    ('taxonomies' '{' taxonomies+=Taxonomy ( "," taxonomies+=Taxonomy)* '}' )?
-  '}';
+  'PostType' name=EString'['pluralName=EString'/'singularName=EString']' (hierarchical?='+'? & internal?='!'?) 
+    ( ':' '{' (fields+=Field | taxonomies+=Taxonomy) ( "," (fields+=Field | taxonomies+=Taxonomy))* '}')? ;
 
+Taxonomy returns wpcm::Taxonomy:
+  'Taxonomy' name=EString'['pluralName=EString'/'singularName=EString']' hierarchical?='+'?  (':' '{' fields+=Field ( "," fields+=Field)*  '}')? ;
+  
+Field returns wpcm::Field:
+   (RelationshipField | TextField | ImageField | BooleanField | RepeaterField | NumberField)  ;
+
+RelationshipField returns wpcm::RelationshipField:
+  'Field'  name=EString'['label=EString']'required?='*'? 'relationship' '@' target=[wpcm::PostType|EString]('#'maxCardinality=EInt)? ;
+
+TextField returns wpcm::TextField:
+  'Field'  name=EString'['label=EString']'required?='*'? 'text' ;
+
+ImageField returns wpcm::ImageField:
+  'Field'  name=EString'['label=EString']'required?='*'? 'image' ;
+
+BooleanField returns wpcm::BooleanField:
+  'Field'  name=EString'['label=EString']'required?='*'? 'bool' ;
+
+RepeaterField returns wpcm::RepeaterField:
+  'Field'  name=EString'['label=EString']'required?='*'? 'repeat' ':' '{' fields+=Field ( "," fields+=Field)* '}' ;
+
+NumberField returns wpcm::NumberField:
+  'Field'  name=EString'['label=EString']'required?='*'? 'number' ;
+  
 EBoolean returns ecore::EBoolean:
   'true' | 'false';
 
-Taxonomy returns wpcm::Taxonomy:
-  hierarchical?='hierarchical'
-  'Taxonomy'
-  name=EString
-  '{'
-    'pluralName' pluralName=EString
-    'singularName' singularName=EString
-    'public' public=EBoolean
-    ('fields' '{' fields+=Field ( "," fields+=Field)* '}' )?
-  '}';
-
-RelationshipField returns wpcm::RelationshipField:
-  required?='required'
-  'RelationshipField'
-  name=EString
-  '{'
-    'label' label=EString
-    'maxCardinality' maxCardinality=EInt
-    'target' target=[wpcm::PostType|EString]
-  '}';
-
-TextField returns wpcm::TextField:
-  required?='required'
-  'TextField'
-  name=EString
-  '{'
-    'label' label=EString
-  '}';
-
-ImageField returns wpcm::ImageField:
-  required?='required'
-  'ImageField'
-  name=EString
-  '{'
-    'label' label=EString
-  '}';
-
-BooleanField returns wpcm::BooleanField:
-  required?='required'
-  'BooleanField'
-  name=EString
-  '{'
-    'label' label=EString
-  '}';
-
-RepeaterField returns wpcm::RepeaterField:
-  required?='required'
-  'RepeaterField'
-  name=EString
-  '{'
-    'label' label=EString
-    'fields' '{' fields+=Field ( "," fields+=Field)* '}' 
-  '}';
-
-NumberField returns wpcm::NumberField:
-  required?='required'
-  'NumberField'
-  name=EString
-  '{'
-    'label' label=EString
-  '}';
-
+EString returns ecore::EString:
+  STRING | ID;
+ 
 EInt returns ecore::EInt:
   '-'? INT;

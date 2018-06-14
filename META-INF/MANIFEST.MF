@@ -8,5 +8,19 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: br.ufes.inf.nemo.wpcmMetamodel,
  org.eclipse.xtext,
  org.eclipse.xtext.xbase,
- org.eclipse.equinox.common;bundle-version="3.5.0"
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.xtext.xbase.lib,
+ org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.xtend.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: br.ufes.inf.nemo.wpcmLanguage.generator,
+ br.ufes.inf.nemo.wpcmLanguage.serializer,
+ br.ufes.inf.nemo.wpcmLanguage.services,
+ br.ufes.inf.nemo.wpcmLanguage.validation,
+ br.ufes.inf.nemo.wpcmLanguage,
+ br.ufes.inf.nemo.wpcmLanguage.parser.antlr,
+ br.ufes.inf.nemo.wpcmLanguage.scoping,
+ br.ufes.inf.nemo.wpcmLanguage.parser.antlr.internal,
+ br.ufes.inf.nemo.wpcmLanguage.formatting2
+Import-Package: org.apache.log4j
